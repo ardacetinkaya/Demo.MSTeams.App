@@ -3,11 +3,12 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31205.134
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HelloWorld", "HelloWorld\HelloWorld.csproj", "{D14F49E8-32A9-4E2C-943A-E4EDCA7CAA55}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HelloWorld", "HelloWorld\HelloWorld.csproj", "{D14F49E8-32A9-4E2C-943A-E4EDCA7CAA55}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Manifest", "Manifest", "{EF50CCA2-5D2D-4C6B-8F1E-AA2360313710}"
 	ProjectSection(SolutionItems) = preProject
 		Manifest\color.png = Manifest\color.png
+		Manifest\manifest.development.json = Manifest\manifest.development.json
 		Manifest\manifest.json = Manifest\manifest.json
 		Manifest\outline.png = Manifest\outline.png
 	EndProjectSection

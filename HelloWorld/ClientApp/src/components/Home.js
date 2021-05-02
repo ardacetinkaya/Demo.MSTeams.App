@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import * as microsoftTeams from "@microsoft/teams-js";
-import { webPubSub } from "@azure/web-pubsub";
 
 export class Home extends Component {
     static displayName = Home.name;
@@ -23,8 +22,6 @@ export class Home extends Component {
             microsoftTeams.authentication.getAuthToken({
                 successCallback: (token) => {
                     microsoftTeams.appInitialization.notifySuccess();
-                    this.setState({ token: token });
-
                     fetch(`api/graph/beta/me`,
                         {
                             method: "GET",
@@ -35,9 +32,11 @@ export class Home extends Component {
                         .then(response => response.json())
                         .then(data => {
                             if (data.error) {
+                                console.error("!!!ERROR!!!");
                                 console.error(data.error);
                             }
                             else {
+                                console.log(data);
                                 this.setState({ userName: data.data.displayName });
                             }
 
@@ -56,8 +55,9 @@ export class Home extends Component {
             });
         });
 
+
         if (this.state.userName === "Unknown") {
-            
+
         }
     }
 
@@ -65,7 +65,7 @@ export class Home extends Component {
         return (
             <div>
                 <h4>Hello, {this.state.userName}</h4>
-                <p>{this.state.token}</p>
+                <p style={{ wordWrap: "break-word", fontSize:"10px" }}></p>
             </div>
         );
     }

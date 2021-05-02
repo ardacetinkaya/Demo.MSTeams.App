@@ -46,8 +46,13 @@ namespace HelloWorld.Controllers
             }
 
 
-            return Problem(responseData, statusCode: 500);
-
+            return new JsonResult(new
+            {
+                Error = responseData
+            })
+            {
+                StatusCode = 500
+            };
         }
     }
 }

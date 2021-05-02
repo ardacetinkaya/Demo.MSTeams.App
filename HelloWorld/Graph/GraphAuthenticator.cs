@@ -1,4 +1,5 @@
-﻿using Microsoft.Graph;
+﻿using Microsoft.Extensions.Logging;
+using Microsoft.Graph;
 using Microsoft.Identity.Client;
 using System;
 using System.Collections.Generic;
@@ -22,6 +23,7 @@ namespace HelloWorld
 
     public class GraphAuthenticator : IGraphAuthenticator
     {
+        private readonly ILogger _logger;
         private readonly string _clientId = string.Empty;
         private readonly string _clientSecret = string.Empty;
         private readonly string _tenantId = string.Empty;
@@ -43,6 +45,9 @@ namespace HelloWorld
             _username = username;
 
         }
+
+        public ILogger Logger { get; init; }
+
         public GraphServiceClient GetAuthenticatedClient(AuthenticatorProvider provider = AuthenticatorProvider.ConfidentialApplicationClient, string token = "")
         {
             GraphServiceClient client = null;
@@ -86,19 +91,28 @@ namespace HelloWorld
                     client = new GraphServiceClient(new DelegateAuthenticationProvider(
                     async (requestMessage) =>
                     {
+                        try
+                        {
+                            var userAssertion = new UserAssertion(token, "urn:ietf:params:oauth:grant-type:jwt-bearer");
 
-                        var userAssertion = new UserAssertion(token, "urn:ietf:params:oauth:grant-type:jwt-bearer");
+                            var clientApplication = ConfidentialClientApplicationBuilder.Create(_clientId)
+                                 .WithClientSecret(_clientSecret)
+                                 .WithTenantId(_tenantId)
+                                 .Build();
 
-                        var clientApplication = ConfidentialClientApplicationBuilder.Create(_clientId)
-                             .WithClientSecret(_clientSecret)
-                             .WithTenantId(_tenantId)
-                             .Build();
+                            var result = await clientApplication.AcquireTokenOnBehalfOf(_defaultScope, userAssertion)
+                                .ExecuteAsync();
 
-                        var result = await clientApplication.AcquireTokenOnBehalfOf(_defaultScope, userAssertion)
-                            .ExecuteAsync();
+                            requestMessage.Headers.Authorization =
+                                new AuthenticationHeaderValue("Bearer", result.AccessToken);
+                        }
+                        catch (Exception ex)
+                        {
+                            Logger.LogError(ex, ex.Message);
+                            throw;
 
-                        requestMessage.Headers.Authorization =
-                            new AuthenticationHeaderValue("Bearer", result.AccessToken);
+                        }
+
 
                     }));
                     break;
