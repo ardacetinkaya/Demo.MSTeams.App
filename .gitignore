@@ -334,3 +334,4 @@ ASALocalRun/
 .localhistory/
 Manifest/development.zip
 *.development.json
+HelloWorld/appsettings.json
