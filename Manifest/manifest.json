@@ -1,0 +1,50 @@
+{
+  "$schema": "https://developer.microsoft.com/en-us/json-schemas/teams/v1.7/MicrosoftTeams.schema.json",
+  "manifestVersion": "1.7",
+  "version": "1.0.0",
+  "id": "00000000-1111-3333-4444-111111111111",
+  "packageName": "com.microsoft.teams.extension",
+  "developer": {
+    "name": "Developer Name",
+    "websiteUrl": "https://somewebsite.com",
+    "privacyUrl": "https://somewebsite.com/Privacy",
+    "termsOfUseUrl": "https://somewebsite.com/TermsOfUse"
+  },
+  "icons": {
+    "color": "color.png",
+    "outline": "outline.png"
+  },
+  "name": {
+    "short": "TeamsApp",
+    "full": "TeamsApp"
+  },
+  "description": {
+    "short": "Short description for TeamsApp",
+    "full": "Full description of TeamsApp"
+  },
+  "accentColor": "#FFFFFF",
+  "bots": [],
+  "composeExtensions": [],
+  "configurableTabs": [],
+  "staticTabs": [
+    {
+      "entityId": "index",
+      "name": "Home",
+      "contentUrl": "https://somewebsite.com/",
+      "scopes": [
+        "personal"
+      ]
+    }
+  ],
+  "permissions": [
+    "identity",
+    "messageTeamMembers"
+  ],
+  "validDomains": [
+    "somewebsite.com"
+  ],
+  "webApplicationInfo": {
+    "id": "azure-ad-app-id",
+    "resource": "api://somewebsite.com/azure-ad-app-id"
+  }
+}
