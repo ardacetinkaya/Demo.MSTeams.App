@@ -7,30 +7,54 @@ export class Home extends Component {
         super(props);
         this.state = {
             userId: "",
-            userName: "Unknown",
-            token: ""
+            token: "",
+            users:[]
         };
     }
 
     componentDidMount() {
         microsoftTeams.initialize();
 
-        microsoftTeams.getContext((context) => {
-            this.setState({ userId: context.userObjectId });
+        microsoftTeams.authentication.getAuthToken({
+            successCallback: (token) => {
+                microsoftTeams.appInitialization.notifySuccess();
+                fetch(`api/graph/beta/users`,
+                    {
+                        method: "GET",
+                        headers: {
+                            "Authorization": `${token}`
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.error) {
+                            console.error("!!!ERROR!!!");
+                            console.error(data.error);
+                        }
+                        else {
+                            console.log(data);
+                            this.setState({ users: data.data.value });
+                        }
 
+                    })
+                    .catch(error => {
+                        console.error('Unable to get user info', error);
 
+                    });
+            },
+            failureCallback: (error) => {
+                microsoftTeams.appInitialization.notifyFailure({
+                    reason: microsoftTeams.appInitialization.FailedReason.AuthFailed,
+                    error,
+                });
+            }
         });
-
-
-        if (this.state.userName === "Unknown") {
-
-        }
     }
 
     render() {
         return (
             <div>
-                <p style={{ wordWrap: "break-word", fontSize:"10px" }}></p>
+                <p style={{ wordWrap: "break-word", fontSize: "10px" }}>Current AD User count is {this.state.users.length}</p>
             </div>
         );
     }
