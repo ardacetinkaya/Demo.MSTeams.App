@@ -7,7 +7,7 @@ using System.Linq;
 using System.Net.Http.Headers;
 using System.Security;
 
-namespace HelloWorld
+namespace Extensions.GraphAPI
 {
     public interface IGraphAuthenticator
     {
@@ -96,8 +96,9 @@ namespace HelloWorld
                             var userAssertion = new UserAssertion(token, "urn:ietf:params:oauth:grant-type:jwt-bearer");
 
                             var clientApplication = ConfidentialClientApplicationBuilder.Create(_clientId)
-                                 .WithClientSecret(_clientSecret)
+                                 .WithRedirectUri(_redirectUri)
                                  .WithTenantId(_tenantId)
+                                 .WithClientSecret(_clientSecret)
                                  .Build();
 
                             var result = await clientApplication.AcquireTokenOnBehalfOf(_defaultScope, userAssertion)

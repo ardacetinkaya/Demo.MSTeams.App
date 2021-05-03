@@ -7,7 +7,7 @@ using System.Linq;
 using System.Security;
 using System.Threading.Tasks;
 
-namespace HelloWorld.Graph
+namespace Extensions.GraphAPI
 {
 
     public static class GraphAPIServiceExtension

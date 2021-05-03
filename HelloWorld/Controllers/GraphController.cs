@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Extensions.GraphAPI;
+using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
 namespace HelloWorld.Controllers

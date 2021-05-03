@@ -16,43 +16,9 @@ export class Home extends Component {
         microsoftTeams.initialize();
 
         microsoftTeams.getContext((context) => {
-            this.setState({ userName: context.userObjectId });
             this.setState({ userId: context.userObjectId });
 
-            microsoftTeams.authentication.getAuthToken({
-                successCallback: (token) => {
-                    microsoftTeams.appInitialization.notifySuccess();
-                    fetch(`api/graph/beta/me`,
-                        {
-                            method: "GET",
-                            headers: {
-                                "Authorization": `${token}`
-                            }
-                        })
-                        .then(response => response.json())
-                        .then(data => {
-                            if (data.error) {
-                                console.error("!!!ERROR!!!");
-                                console.error(data.error);
-                            }
-                            else {
-                                console.log(data);
-                                this.setState({ userName: data.data.displayName });
-                            }
 
-                        })
-                        .catch(error => {
-                            console.error('Unable to get user info', error);
-
-                        });
-                },
-                failureCallback: (error) => {
-                    microsoftTeams.appInitialization.notifyFailure({
-                        reason: microsoftTeams.appInitialization.FailedReason.AuthFailed,
-                        error,
-                    });
-                }
-            });
         });
 
 
@@ -64,7 +30,6 @@ export class Home extends Component {
     render() {
         return (
             <div>
-                <h4>Hello, {this.state.userName}</h4>
                 <p style={{ wordWrap: "break-word", fontSize:"10px" }}></p>
             </div>
         );
