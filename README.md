@@ -1,9 +1,10 @@
 # Demo.MSTeams.App
+<img src="https://user-images.githubusercontent.com/4550197/117008179-1daf7300-acf3-11eb-8d1b-d860aeba274a.png" align="left" width="80px" />
  
-Simple demonstration of Microsoft Teams Tab Application model with in ASP.NET Core React App template.
+This repository is a simple demonstration of Microsoft Teams Tab Application model with current ASP.NET Core React App template. Basically you can see usage of **MS Teams Javascript client SDK** usage and some approaches to use **Microsoft Graph API**. For initial installation of SDK, check [Teams Javascript client SDK](https://docs.microsoft.com/en-us/microsoftteams/platform/tabs/how-to/using-teams-client-sdk)
 
 
-First you need to import required **@microsoft/teams-js** package. Check [Teams Javascript client SDK](https://docs.microsoft.com/en-us/microsoftteams/platform/tabs/how-to/using-teams-client-sdk)
+When you are ready with development environemnt, first you need to import required **@microsoft/teams-js** package. 
 
 ```javascript
 import * as microsoftTeams from "@microsoft/teams-js";
