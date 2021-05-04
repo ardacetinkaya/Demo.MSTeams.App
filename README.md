@@ -37,3 +37,8 @@ componentDidMount() {
         });
     }
 ```
+
+To add an application to Microsoft Teams, a manifest file is required. This manifest file defines some properties for the application. You can check full manifest file description [here](https://docs.microsoft.com/en-us/microsoftteams/platform/resources/schema/manifest-schema).
+
+For this repository check more basic and simple version ---> **[manifest.json](https://github.com/ardacetinkaya/Demo.MSTeams.App/blob/main/Manifest/manifest.json)**
+
