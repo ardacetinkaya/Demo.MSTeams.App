@@ -5,7 +5,9 @@ This repository is a simple demonstration of Microsoft Teams **Tab Application**
 
 Basically you can see usage of **MS Teams Javascript client SDK** usage and some approaches to use **Microsoft Graph API**. For initial installation of SDK, check [Teams Javascript client SDK](https://docs.microsoft.com/en-us/microsoftteams/platform/tabs/how-to/using-teams-client-sdk)
 
-![image](https://user-images.githubusercontent.com/4550197/117016688-9f0b0380-acfb-11eb-9796-3e00afed968c.png)
+
+![image](https://user-images.githubusercontent.com/4550197/117025467-99192080-ad03-11eb-9c01-194b536a1cee.png)
+
 
 
 With Microsoft Graph API calls some additional actions can be executed. Tabs application model for Microsoft Teams supports single sign-on (SSO). So logged user in MS Teams can be also a logged-in user for your application. To have this support, you need to define a AAD application in you M365 tenant. **[Create your AAD application](https://docs.microsoft.com/en-us/microsoftteams/platform/tabs/how-to/authentication/auth-aad-sso#1-create-your-aad-application)**
@@ -95,7 +97,7 @@ microsoftTeams.getContext((context) => {
             });
 ```
 
-To see back-end API check **[GraphController.cs](https://github.com/ardacetinkaya/Demo.MSTeams.App/blob/main/HelloWorld/Controllers/GraphController.cs)**. Basically some custom **[GraphService.cs](https://github.com/ardacetinkaya/Demo.MSTeams.App/blob/main/HelloWorld/Graph/GraphService.cs)** is injected into controller with a authentication provider.**[GraphAuthenticator.cs](https://github.com/ardacetinkaya/Demo.MSTeams.App/blob/main/HelloWorld/Graph/GraphAuthenticator.cs)** with **[Microsoft.Graph APIs](https://www.nuget.org/packages/Microsoft.Graph)**
+To see back-end API check **[GraphController.cs](https://github.com/ardacetinkaya/Demo.MSTeams.App/blob/main/HelloWorld/Controllers/GraphController.cs)**. Basically some custom **[GraphService.cs](https://github.com/ardacetinkaya/Demo.MSTeams.App/blob/main/HelloWorld/Graph/GraphService.cs)** is injected into controller with a authentication provider, **[GraphAuthenticator.cs](https://github.com/ardacetinkaya/Demo.MSTeams.App/blob/main/HelloWorld/Graph/GraphAuthenticator.cs)** with **[Microsoft.Graph APIs](https://www.nuget.org/packages/Microsoft.Graph)**
 
 To authenticate for Graph API call, there are some different approaches and providers. You can check **[here](https://docs.microsoft.com/en-us/graph/sdks/choose-authentication-providers?tabs=CS)** for more detailed info. In this repository you can find additional provider approaches with a simple code but for this demo following **DelegateAuthenticationProvider()** is used with MS Teams' user token with **[Microsoft.Identity.Client](https://www.nuget.org/packages/Microsoft.Identity.Client/)** 
 
@@ -136,3 +138,10 @@ To add an application to Microsoft Teams, a manifest file is required. This mani
 
 For this repository check more basic and simple version ---> **[manifest.json](https://github.com/ardacetinkaya/Demo.MSTeams.App/blob/main/Manifest/manifest.json)**
 
+# References
+
+- [Calling Microsoft Graph from your Teams Application – Part 3: Tabs](https://bob1german.com/2020/08/31/calling-microsoft-graph-from-your-teams-application-part3/) 
+  - _Also check Bob German's other posts, they are really good_
+- [Authentication in Teams tabs using Microsoft Graph Toolkit](https://quickbites.dev/2020/07/29/auth-mgt-teams-tab/)
+- [Choose a Microsoft Graph authentication provider based on scenario](https://docs.microsoft.com/en-us/graph/sdks/choose-authentication-providers?tabs=CS)
+- [Create your first Teams app using C#](https://docs.microsoft.com/en-us/microsoftteams/platform/tutorials/get-started-dotnet-app-studio)
