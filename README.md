@@ -9,7 +9,7 @@ First you need to import required **@microsoft/teams-js** package. Check [Teams 
 import * as microsoftTeams from "@microsoft/teams-js";
 ```
 
-After initializing the SDK, any SDK methods can be executed in required places in code
+After initializing the SDK, any SDK methods can be executed in required places in code for example; for a component getting context can be done is componentDidMount()
 
 ```javascript
 componentDidMount() {
