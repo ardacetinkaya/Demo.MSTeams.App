@@ -1,7 +1,9 @@
 # Demo.MSTeams.App
 <img src="https://user-images.githubusercontent.com/4550197/117008179-1daf7300-acf3-11eb-8d1b-d860aeba274a.png" align="left" width="80px" />
  
-This repository is a simple demonstration of Microsoft Teams **Tab Application** model with current **ASP.NET Core React App template**. Basically you can see usage of **MS Teams Javascript client SDK** usage and some approaches to use **Microsoft Graph API**. For initial installation of SDK, check [Teams Javascript client SDK](https://docs.microsoft.com/en-us/microsoftteams/platform/tabs/how-to/using-teams-client-sdk)
+This repository is a simple demonstration of Microsoft Teams **Tab Application** model with current **ASP.NET Core React App template**. This repository is kind of a demo to integrate a web application into MS Teams.
+
+Basically you can see usage of **MS Teams Javascript client SDK** usage and some approaches to use **Microsoft Graph API**. For initial installation of SDK, check [Teams Javascript client SDK](https://docs.microsoft.com/en-us/microsoftteams/platform/tabs/how-to/using-teams-client-sdk)
 
 ![image](https://user-images.githubusercontent.com/4550197/117016688-9f0b0380-acfb-11eb-9796-3e00afed968c.png)
 
@@ -40,7 +42,50 @@ componentDidMount() {
         });
     }
 ```
+MS Teams' authentication token is not a valid token for Graph API calls. So to make a Graph API calls, first you need the proper token. In this repository with additional back-end API call, MS Teams identification token is used to have proper Graph API token and to have Graph API request.
 
+```javascript
+microsoftTeams.getContext((context) => {
+            this.setState({ userName: context.userObjectId });
+            microsoftTeams.authentication.getAuthToken({
+                successCallback: (token) => {
+                    microsoftTeams.appInitialization.notifySuccess();
+                    //With MS Teams' user token, some back-end API call is done
+                    //Within this call, this token is used to have a proper Graph API token
+                    //and a GET request is done to the 'graph/me' endpoint.
+                    //Then .displayName property is set in component state
+                    fetch(`api/graph/beta/me`,
+                        {
+                            method: "GET",
+                            headers: {
+                                "Authorization": `${token}`
+                            }
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.error) {
+                                console.error("!!!ERROR!!!");
+                                console.error(data.error);
+                            }
+                            else {
+                                console.log(data);
+                                this.setState({ userName: data.data.displayName });
+                            }
+
+                        })
+                        .catch(error => {
+                            console.error('Unable to get user info', error);
+
+                        });
+                },
+                failureCallback: (error) => {
+                    microsoftTeams.appInitialization.notifyFailure({
+                        reason: microsoftTeams.appInitialization.FailedReason.AuthFailed,
+                        error,
+                    });
+                }
+            });
+```
 
 With Microsoft Graph API calls some additional actions can be executed. Tabs application model for Microsoft Teams supports single sign-on (SSO). So logged user in MS Teams can be also a logged-in user for your application. To have this support, you need to define a AAD application in you M365 tenant. **[Create your AAD application](https://docs.microsoft.com/en-us/microsoftteams/platform/tabs/how-to/authentication/auth-aad-sso#1-create-your-aad-application)**
 
