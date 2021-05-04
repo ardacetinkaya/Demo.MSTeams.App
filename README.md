@@ -8,8 +8,16 @@ Basically you can see usage of **MS Teams Javascript client SDK** usage and some
 ![image](https://user-images.githubusercontent.com/4550197/117016688-9f0b0380-acfb-11eb-9796-3e00afed968c.png)
 
 
+With Microsoft Graph API calls some additional actions can be executed. Tabs application model for Microsoft Teams supports single sign-on (SSO). So logged user in MS Teams can be also a logged-in user for your application. To have this support, you need to define a AAD application in you M365 tenant. **[Create your AAD application](https://docs.microsoft.com/en-us/microsoftteams/platform/tabs/how-to/authentication/auth-aad-sso#1-create-your-aad-application)**
 
-When you are ready with development environemnt, first you need to import required **@microsoft/teams-js** package. 
+When you have created AAD application, in manifest file additional definition should be done to attach MS Teams app. with AAD application.
+```json
+"webApplicationInfo": {
+  "id": "00000000-0000-0000-0000-000000000000",
+  "resource": "api://subdomain.example.com/00000000-0000-0000-0000-000000000000"
+}
+```
+When you are ready with development environment, first you need to import required **@microsoft/teams-js** package. 
 
 ```javascript
 import * as microsoftTeams from "@microsoft/teams-js";
@@ -87,14 +95,40 @@ microsoftTeams.getContext((context) => {
             });
 ```
 
-With Microsoft Graph API calls some additional actions can be executed. Tabs application model for Microsoft Teams supports single sign-on (SSO). So logged user in MS Teams can be also a logged-in user for your application. To have this support, you need to define a AAD application in you M365 tenant. **[Create your AAD application](https://docs.microsoft.com/en-us/microsoftteams/platform/tabs/how-to/authentication/auth-aad-sso#1-create-your-aad-application)**
+To see back-end API check **[GraphController.cs](https://github.com/ardacetinkaya/Demo.MSTeams.App/blob/main/HelloWorld/Controllers/GraphController.cs)**. Basically some custom **[GraphService.cs](https://github.com/ardacetinkaya/Demo.MSTeams.App/blob/main/HelloWorld/Graph/GraphService.cs)** is injected into controller with a authentication provider.**[GraphAuthenticator.cs](https://github.com/ardacetinkaya/Demo.MSTeams.App/blob/main/HelloWorld/Graph/GraphAuthenticator.cs)** with **[Microsoft.Graph APIs](https://www.nuget.org/packages/Microsoft.Graph)**
 
-When you have created AAD application, in manifest file additional definition should be done to attach MS Teams app. with AAD application.
-```json
-"webApplicationInfo": {
-  "id": "00000000-0000-0000-0000-000000000000",
-  "resource": "api://subdomain.example.com/00000000-0000-0000-0000-000000000000"
-}
+To authenticate for Graph API call, there are some different approaches and providers. You can check **[here](https://docs.microsoft.com/en-us/graph/sdks/choose-authentication-providers?tabs=CS)** for more detailed info. In this repository you can find additional provider approaches with a simple code but for this demo following **DelegateAuthenticationProvider()** is used with MS Teams' user token with **[Microsoft.Identity.Client](https://www.nuget.org/packages/Microsoft.Identity.Client/)** 
+
+```csharp
+     client = new GraphServiceClient(new DelegateAuthenticationProvider(
+     async (requestMessage) =>
+     {
+         try
+         {
+             // "token" is MS Teams' user token
+             var userAssertion = new UserAssertion(token, "urn:ietf:params:oauth:grant-type:jwt-bearer");
+
+             var clientApplication = ConfidentialClientApplicationBuilder.Create(_clientId)
+                  .WithRedirectUri(_redirectUri)
+                  .WithTenantId(_tenantId)
+                  .WithClientSecret(_clientSecret)
+                  .Build();
+
+             var result = await clientApplication.AcquireTokenOnBehalfOf(_defaultScope, userAssertion)
+                 .ExecuteAsync();
+
+             requestMessage.Headers.Authorization =
+                 new AuthenticationHeaderValue("Bearer", result.AccessToken);
+         }
+         catch (Exception ex)
+         {
+             Logger.LogError(ex, ex.Message);
+             throw;
+
+         }
+
+
+     }));
 ```
 
 
